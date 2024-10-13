@@ -3,7 +3,7 @@ let logger = [];
 
 logger.info = (type, module, result = "") => {
     console.log(
-        chalk.green("[+]"),
+        chalk.green("ℹ️"),
         chalk.white(
             `(${new Date().getHours()}:${new Date().getMinutes()}:${new Date().getSeconds()})`
         ),
@@ -17,7 +17,7 @@ logger.info = (type, module, result = "") => {
 
 logger.warn = (type, module, result = "") => {
     console.log(
-        chalk.yellow("[?]"),
+        chalk.yellow("⚠️"),
         chalk.white(
             `(${new Date().getHours()}:${new Date().getMinutes()}:${new Date().getSeconds()})`
         ),
@@ -31,7 +31,7 @@ logger.warn = (type, module, result = "") => {
 
 logger.alert = (type, module, result = "") => {
     console.log(
-        chalk.red("[-]"),
+        chalk.red("❗"),
         chalk.white(
             `(${new Date().getHours()}:${new Date().getMinutes()}:${new Date().getSeconds()})`
         ),
@@ -45,7 +45,7 @@ logger.alert = (type, module, result = "") => {
 
 logger.error = (type, module, result = "") => {
     console.log(
-        chalk.red("[!]"),
+        chalk.red("❗❓"),
         chalk.white(
             `(${new Date().getHours()}:${new Date().getMinutes()}:${new Date().getSeconds()})`
         ),
