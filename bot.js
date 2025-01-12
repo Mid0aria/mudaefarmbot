@@ -84,7 +84,6 @@ const { getRandomBanner } = require("./utils/banner.js");
 //client
 const { Client, Collection, RichPresence } = require("discord.js-selfbot-v13");
 
-const notifier = require("node-notifier");
 const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
 process.title = `Mudae Farm Bot v${packageJson.version}`;
@@ -122,7 +121,7 @@ process.title = `Mudae Farm Bot v${packageJson.version}`;
 
         client.chalk = chalk;
         client.fs = fs;
-        client.notifier = notifier;
+
         client.childprocess = cp;
         client.config = config;
         client.delay = delay;
