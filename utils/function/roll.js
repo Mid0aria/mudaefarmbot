@@ -89,10 +89,13 @@ async function roll(client, channel) {
             const match = description.match(regex);
             let claims, likes;
             if (match) {
-                claims = match[1];
-                likes = match[2];
-                // const kakera = match[3];
+                claims = parseInt(match[1], 10);
+                likes = parseInt(match[2], 10);
+                // const kakera = parseInt(match[3], 10)
             }
+            // console.log(
+            //     `Claims: ${claims} ${client.config.roll.rank} | ${claims < client.config.roll.rank}, Likes: ${likes} ${likes < client.config.roll.rank}`,
+            // );
             if (
                 claims < client.config.roll.rank ||
                 likes < client.config.roll.rank
@@ -235,11 +238,61 @@ async function reset(client, channel) {
         .send({
             content: `$rolls`,
         })
-        .then(async () => {
-            client.logger.info("Farm", "Roll", `Roll reset`);
-            client.global.temp.rollresetstock--;
-            await client.delay(2500);
-            await roll(client, channel);
+        .then(async (clmsg) => {
+            let id = clmsg.id;
+            let message = await getMessage();
+            async function getMessage() {
+                return new Promise((resolve) => {
+                    const filterphrases = [
+                        "to reset your rolls timer",
+                        "rolls timer for ONE",
+                    ];
+
+                    const filter = (msg) =>
+                        filterphrases.some((phrase) =>
+                            msg.content.includes(phrase),
+                        ) &&
+                        msg.author.id === "432610292342587392" &&
+                        msg.channel.id === channel.id &&
+                        msg.id.localeCompare(id) > 0;
+
+                    const listener = (msg) => {
+                        if (filter(msg)) {
+                            clearTimeout(timer);
+                            client.off("messageCreate", listener);
+                            resolve(msg);
+                        }
+                    };
+
+                    const timer = setTimeout(() => {
+                        client.logger.warn(
+                            "Farm",
+                            "Roll",
+                            "Rechecking Roll Reset...",
+                        );
+                        client.off("messageCreate", listener);
+                        const collector = channel.createMessageCollector({
+                            filter,
+                            time: 11600,
+                        });
+                        collector.on("collect", (msg) => {
+                            if (filter(msg)) {
+                                collector.stop();
+                                resolve(msg);
+                            }
+                        });
+                        collector.on("end", () => resolve(null));
+                    }, 10000);
+
+                    client.on("messageCreate", listener);
+                });
+            }
+            if (message == null) {
+                client.logger.info("Farm", "Roll", `Roll reset`);
+                client.global.temp.rollresetstock--;
+                await client.delay(2500);
+                await roll(client, channel);
+            }
         });
 }
 
