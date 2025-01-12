@@ -14,7 +14,7 @@ dWdnY2Y6Ly9iY3JhLmZjYmd2c2wucGJ6L2dlbnB4LzVwc2tIZ1B4Y3hQVkVlWGxxVVhGb1kgcm90MTM=
 
 - [🎈・Installation](#Installation)
     - [Windows / Linux](#windows--linux) - Official
-    - [Android / iOS (Termux)](#android--ios-termux) - Official
+    - [Android (Termux)](#android-termux) - Official
 
 If you need the help, join the Discord server [here](https://discord.gg/WzYXVbXt6C)
 
@@ -29,6 +29,8 @@ If you need the help, join the Discord server [here](https://discord.gg/WzYXVbXt
 [❗・Important](#important-anyone-using-the-bot-is-deemed-to-have-read-and-accepted-these)<br>
 
 [👑・Features](#features)<br>
+
+[⚙・Tokens.json example](#tokensjson-example)<br>
 
 [⚙・Config.json example](#configjson-example)<br>
 
@@ -62,12 +64,12 @@ If you need the help, join the Discord server [here](https://discord.gg/WzYXVbXt
 ## 👑・Features
 
 - Multi Account Support
-- Commands:
-    - Auto Roll
-    - Auto ReRoll
-    - Auto Claim
-    - Auto daily
-    - Auto vote
+- Auto Roll
+- Auto ReRoll (from stock)
+- Auto claims rolls if they are at the desired rank threshold
+- Auto Daily
+- Auto Daily Kakera
+- Auto Vote
 
 ## ⚙・tokens.json example
 
