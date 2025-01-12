@@ -5,12 +5,6 @@
  * For more information, see README.md and LICENSE
  */
 
-/**
- * Reads the command files from the './commands/' directory and filters out only the JavaScript files.
- *
- * @constant {string[]} commands - An array of filenames that end with '.js' in the './commands/' directory.
- */
-
 module.exports = async (client) => {
     const commands = client.fs
         .readdirSync(`./commands/`)

@@ -5,13 +5,7 @@
  * For more information, see README.md and LICENSE
  */
 
-/**
- * Loads event handler files from the specified directory and binds them to the client.
- *
- * @param {string} dirs - The directory name within the 'events' folder to load event handlers from.
- */
-
-module.exports = async (client, message) => {
+module.exports = async (client) => {
     const load = (dirs) => {
         const events = client.fs
             .readdirSync(`./events/${dirs}/`)
