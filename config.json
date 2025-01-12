@@ -1,0 +1,15 @@
+{
+    "prefix": ".",
+    "discordrpc": true,
+    "chatfeedback": true,
+    "autostart": true,
+    "autovote": true,
+    "daily": true,
+    "dailykakera": true,
+    "roll": {
+        "rank": "99000",
+        "male": false,
+        "female": true,
+        "both": false
+    }
+}

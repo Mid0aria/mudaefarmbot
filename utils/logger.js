@@ -1,17 +1,19 @@
 const chalk = require("chalk");
-let logger = [];
+
+let logger = {};
 
 logger.info = (type, module, result = "") => {
     console.log(
         chalk.green("ℹ️"),
         chalk.white(
-            `(${new Date().getHours()}:${new Date().getMinutes()}:${new Date().getSeconds()})`
+            `(${new Date().getHours()}:${new Date().getMinutes()}:${new Date().getSeconds()})`,
         ),
+        chalk.white(`>`),
         chalk.blue(chalk.bold(type)),
         chalk.white(`>`),
         chalk.magenta(module),
         chalk.white(`>`),
-        chalk.green(result)
+        chalk.green(result),
     );
 };
 
@@ -19,13 +21,14 @@ logger.warn = (type, module, result = "") => {
     console.log(
         chalk.yellow("⚠️"),
         chalk.white(
-            `(${new Date().getHours()}:${new Date().getMinutes()}:${new Date().getSeconds()})`
+            `(${new Date().getHours()}:${new Date().getMinutes()}:${new Date().getSeconds()})`,
         ),
+        chalk.white(`>`),
         chalk.blue(chalk.bold(type)),
         chalk.white(`>`),
         chalk.magenta(module),
         chalk.white(`>`),
-        chalk.yellow(result)
+        chalk.yellow(result),
     );
 };
 
@@ -33,13 +36,14 @@ logger.alert = (type, module, result = "") => {
     console.log(
         chalk.red("❗"),
         chalk.white(
-            `(${new Date().getHours()}:${new Date().getMinutes()}:${new Date().getSeconds()})`
+            `(${new Date().getHours()}:${new Date().getMinutes()}:${new Date().getSeconds()})`,
         ),
+        chalk.white(`>`),
         chalk.blue(chalk.bold(type)),
         chalk.white(`>`),
         chalk.magenta(module),
         chalk.white(`>`),
-        chalk.red(result)
+        chalk.red(result),
     );
 };
 
@@ -47,13 +51,14 @@ logger.error = (type, module, result = "") => {
     console.log(
         chalk.red("❗❓"),
         chalk.white(
-            `(${new Date().getHours()}:${new Date().getMinutes()}:${new Date().getSeconds()})`
+            `(${new Date().getHours()}:${new Date().getMinutes()}:${new Date().getSeconds()})`,
         ),
+        chalk.white(`>`),
         chalk.blue(chalk.bold(type)),
         chalk.white(`>`),
         chalk.magenta(module),
         chalk.white(`>`),
-        chalk.red(result)
+        chalk.red(result),
     );
 };
 

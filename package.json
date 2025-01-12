@@ -1,12 +1,9 @@
 {
     "name": "mudaefarmbot",
     "version": "0.0.1",
-    "description": "Discord Mudae farm bot",
+    "version_note": ".",
+    "description": "Discord Mudae Farm Bot",
     "main": "bot.js",
-    "scripts": {
-        "test": "echo \"Error: no test specified\" && exit 1",
-        "start": "node --no-deprecation bot.js"
-    },
     "repository": {
         "type": "git",
         "url": "git+https://github.com/Mid0aria/mudaefarmbot.git"
@@ -17,7 +14,7 @@
         "selfbot",
         "selfbot-for-discord",
         "mudae",
-        "owo-bot",
+        "mudae-bot",
         "mudae-self-bot",
         "mudaefarm",
         "discord-mudae-selfbot",
@@ -28,22 +25,28 @@
         "mudaeautofarmer"
     ],
     "author": "Mid0aria",
-    "license": "MIT",
+    "license": "ISC",
+    "scripts": {
+        "start": "node bot.js",
+        "run": "node bot.js",
+        "setup": "npm i",
+        "format": "prettier -w ."
+    },
+    "dependencies": {
+        "axios": "^1.7.9",
+        "chalk": "^4.1.2",
+        "discord.js-selfbot-v13": "^3.4.2",
+        "fs-extra": "^11.2.0",
+        "yargs": "^17.7.2"
+    },
     "bugs": {
         "url": "https://github.com/Mid0aria/mudaefarmbot/issues"
     },
     "homepage": "https://github.com/Mid0aria/mudaefarmbot#readme",
     "devDependencies": {
-        "@eslint/js": "^9.12.0",
-        "eslint": "^9.12.0",
-        "globals": "^15.11.0"
-    },
-    "dependencies": {
-        "adm-zip": "^0.5.16",
-        "axios": "^1.7.7",
-        "chalk": "^4.1.2",
-        "discord.js-selfbot-v13": "^3.4.0",
-        "fs-extra": "^11.2.0",
-        "node-notifier": "^10.0.1"
+        "@eslint/js": "^9.17.0",
+        "eslint": "^9.17.0",
+        "globals": "^15.14.0",
+        "prettier": "^3.4.2"
     }
 }
