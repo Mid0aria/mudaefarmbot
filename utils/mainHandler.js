@@ -79,92 +79,6 @@ async function tucheck(client, channel) {
 
             let tucontents = message.content.toLowerCase();
 
-            if (
-                tucontents.includes("rolls left") ||
-                tucontents.includes("roll left")
-            ) {
-                const match = tucontents.match(
-                    /you have \*\*(\d+)\*\* rolls left\./,
-                );
-
-                if (match) {
-                    const rollsLeft = parseInt(match[1], 10);
-                    client.global.temp.leftrolls = rollsLeft;
-                }
-                await client.delay(2500);
-                channel.sendTyping();
-                await channel
-                    .send({
-                        content: `$vote`,
-                    })
-                    .then(async (clmsg) => {
-                        let id = clmsg.id;
-                        let message = await getMessage();
-                        async function getMessage() {
-                            return new Promise((resolve) => {
-                                const filterphrases = ["You may vote again in"];
-                                const filter = (msg) =>
-                                    filterphrases.some((phrase) =>
-                                        msg.content.includes(phrase),
-                                    ) &&
-                                    msg.author.id === "432610292342587392" &&
-                                    msg.channel.id === channel.id &&
-                                    msg.id.localeCompare(id) > 0;
-
-                                const listener = (msg) => {
-                                    if (filter(msg)) {
-                                        clearTimeout(timer);
-                                        client.off("messageCreate", listener);
-                                        resolve(msg);
-                                    }
-                                };
-
-                                const timer = setTimeout(() => {
-                                    client.logger.warn(
-                                        "Farm",
-                                        "Roll",
-                                        "Rechecking Roll Stock...",
-                                    );
-                                    client.off("messageCreate", listener);
-                                    const collector =
-                                        channel.createMessageCollector({
-                                            filter,
-                                            time: 11600,
-                                        });
-                                    collector.on("collect", (msg) => {
-                                        if (filter(msg)) {
-                                            collector.stop();
-                                            resolve(msg);
-                                        }
-                                    });
-                                    collector.on("end", () => resolve(null));
-                                }, 10000);
-
-                                client.on("messageCreate", listener);
-                            });
-                        }
-                        const rollsRegex =
-                            /You have \*\*(\d+)\*\* rolls reset in stock/;
-
-                        const match = message.content.match(rollsRegex);
-                        const rollsInStock = match ? parseInt(match[1], 10) : 0;
-                        client.global.temp.rollresetstock = rollsInStock;
-                        client.logger.info(
-                            "Farm",
-                            "Roll",
-                            `${rollsInStock} roll resetter in stock`,
-                        );
-                    });
-                await client.delay(2500);
-                if (client.global.temp.leftrolls > 0) {
-                    require("./function/roll.js")(client, channel);
-                } else {
-                    require("./function/roll.js")(client, channel, "reset");
-                }
-            }
-
-            await client.delay(2500);
-
             if (client.config.daily) {
                 if (tucontents.includes("$daily reset in")) {
                     const dailyagainregex =
@@ -193,37 +107,8 @@ async function tucheck(client, channel) {
                     require("./function/daily.js")(client, channel);
                 }
             }
+            await client.delay(4500);
 
-            await client.delay(2500);
-
-            if (client.config.dailykakera) {
-                if (tucontents.includes("$dk is ready")) {
-                    require("./function/dailykakera.js")(client, channel);
-                } else if (tucontents.includes("$dk reset in")) {
-                    const dailykakeraagainregex =
-                        /$dk reset in \*\*(\d+)h\s(\d+)min\*\*/;
-                    const match = tucontents.match(dailykakeraagainregex);
-
-                    if (match) {
-                        const hours = parseInt(match[1], 10);
-                        const minutes = parseInt(match[2], 10);
-
-                        const milliseconds =
-                            hours * 60 * 60 * 1000 + minutes * 60 * 1000;
-                        client.global.temp.dailykakeraagain = milliseconds;
-                        client.logger.warn(
-                            "Farm",
-                            "Tu - Daily Kakera",
-                            `Daily kakera claimed in advance. It will restart in ${client.global.temp.dailykakeraagain} milliseconds`,
-                        );
-                    }
-                    require("./function/dailykakera.js")(
-                        client,
-                        channel,
-                        "reclaim",
-                    );
-                }
-            }
             if (client.config.autovote) {
                 if (tucontents.includes("you may vote right now")) {
                     client.logger.info(
@@ -303,6 +188,144 @@ async function tucheck(client, channel) {
                                 break;
                         }
                     }, client.global.temp.voteagaintime);
+                }
+            }
+            await client.delay(4500);
+
+            if (client.config.dailykakera) {
+                if (tucontents.includes("$dk is ready")) {
+                    require("./function/dailykakera.js")(client, channel);
+                } else if (tucontents.includes("$dk reset in")) {
+                    const dailykakeraagainregex =
+                        /$dk reset in \*\*(\d+)h\s(\d+)min\*\*/;
+                    const match = tucontents.match(dailykakeraagainregex);
+
+                    if (match) {
+                        const hours = parseInt(match[1], 10);
+                        const minutes = parseInt(match[2], 10);
+
+                        const milliseconds =
+                            hours * 60 * 60 * 1000 + minutes * 60 * 1000;
+                        client.global.temp.dailykakeraagain = milliseconds;
+                        client.logger.warn(
+                            "Farm",
+                            "Tu - Daily Kakera",
+                            `Daily kakera claimed in advance. It will restart in ${client.global.temp.dailykakeraagain} milliseconds`,
+                        );
+                    }
+                    require("./function/dailykakera.js")(
+                        client,
+                        channel,
+                        "reclaim",
+                    );
+                }
+            }
+
+            await client.delay(2500);
+
+            if (
+                tucontents.includes("rolls left") ||
+                tucontents.includes("roll left")
+            ) {
+                const rollsleftmatch = tucontents.match(
+                    /you have \*\*(\d+)\*\* rolls left\./,
+                );
+                const rollsresetmatch = tucontents.match(
+                    /rolls reset in \*\*(\d+)\*\* min/,
+                );
+
+                if (rollsleftmatch) {
+                    const rollsLeft = parseInt(rollsleftmatch[1], 10);
+                    client.global.temp.leftrolls = rollsLeft;
+                }
+                if (rollsresetmatch) {
+                    const minutes = rollsresetmatch[1];
+                    const milliseconds = minutes * 60 * 1000;
+                    client.global.temp.rollresettime = milliseconds;
+                    client.logger.info(
+                        "Farm",
+                        "Roll",
+                        `Next rolls reset in: ${minutes} minutes`,
+                    );
+                }
+                await client.delay(2500);
+                channel.sendTyping();
+                await channel
+                    .send({
+                        content: `$vote`,
+                    })
+                    .then(async (clmsg) => {
+                        let id = clmsg.id;
+                        let message = await getMessage();
+                        async function getMessage() {
+                            return new Promise((resolve) => {
+                                const filterphrases = ["You may vote again in"];
+                                const filter = (msg) =>
+                                    filterphrases.some((phrase) =>
+                                        msg.content.includes(phrase),
+                                    ) &&
+                                    msg.author.id === "432610292342587392" &&
+                                    msg.channel.id === channel.id &&
+                                    msg.id.localeCompare(id) > 0;
+
+                                const listener = (msg) => {
+                                    if (filter(msg)) {
+                                        clearTimeout(timer);
+                                        client.off("messageCreate", listener);
+                                        resolve(msg);
+                                    }
+                                };
+
+                                const timer = setTimeout(() => {
+                                    client.logger.warn(
+                                        "Farm",
+                                        "Roll",
+                                        "Rechecking Roll Stock...",
+                                    );
+                                    client.off("messageCreate", listener);
+                                    const collector =
+                                        channel.createMessageCollector({
+                                            filter,
+                                            time: 11600,
+                                        });
+                                    collector.on("collect", (msg) => {
+                                        if (filter(msg)) {
+                                            collector.stop();
+                                            resolve(msg);
+                                        }
+                                    });
+                                    collector.on("end", () => resolve(null));
+                                }, 10000);
+
+                                client.on("messageCreate", listener);
+                            });
+                        }
+                        const rollsRegex =
+                            /You have \*\*(\d+)\*\* rolls reset in stock/;
+
+                        const match = message.content.match(rollsRegex);
+                        const rollsInStock = match ? parseInt(match[1], 10) : 0;
+                        client.global.temp.rollresetstock = rollsInStock;
+                        client.logger.info(
+                            "Farm",
+                            "Roll",
+                            `${rollsInStock} roll resetter in stock`,
+                        );
+                    });
+                await client.delay(2500);
+                if (client.global.temp.leftrolls > 0) {
+                    require("./function/roll.js")(client, channel);
+                } else if (client.global.temp.rollresetstock > 0) {
+                    require("./function/roll.js")(client, channel, "reset");
+                } else {
+                    client.logger.info(
+                        "Farm",
+                        "Roll",
+                        `waiting for the rolls to reset: ${client.global.temp.rollresettime} miliseconds`,
+                    );
+                    setTimeout(() => {
+                        require("./function/roll.js")(client, channel);
+                    }, client.global.temp.rollresettime);
                 }
             }
         });

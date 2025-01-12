@@ -38,12 +38,15 @@ async function roll(client, channel) {
             async function getMessage() {
                 return new Promise((resolve) => {
                     const filterphrases = ["Claims", "Likes", "emoji to claim"];
-
+                    const limitphrases = ["the roulette is limited"];
                     const filter = (msg) =>
-                        msg.embeds[0] &&
-                        filterphrases.some((phrase) =>
-                            msg.embeds[0].description.includes(phrase),
-                        ) &&
+                        ((msg.embeds[0] &&
+                            filterphrases.some((phrase) =>
+                                msg.embeds[0].description.includes(phrase),
+                            )) ||
+                            limitphrases.some((phrase) =>
+                                msg.content.includes(phrase),
+                            )) &&
                         msg.author.id === "432610292342587392" &&
                         msg.channel.id === channel.id &&
                         msg.id.localeCompare(id) > 0;
@@ -83,6 +86,32 @@ async function roll(client, channel) {
                 client.logger.alert("Farm", "Roll", "Cannot retrieve Roll.");
                 return;
             }
+            if (message.content.includes("roulette is limited")) {
+                const regex = /(\d+)\s*min\s*left/;
+                const match = message.content.match(regex);
+                if (match) {
+                    const timeLeftMinutes = parseInt(match[1]);
+                    const timeLeftMilliseconds = timeLeftMinutes * 60 * 1000;
+                    client.logger.alert(
+                        "Farm",
+                        "Roll",
+                        `Roulette is limited. Waiting for ${timeLeftMinutes} minute.`,
+                    );
+                    setTimeout(async () => {
+                        await roll(client, channel);
+                    }, timeLeftMilliseconds);
+                } else {
+                    client.logger.alert(
+                        "Farm",
+                        "Roll",
+                        `Roulette is limited. Waiting for 60 minutes.`,
+                    );
+                    setTimeout(async () => {
+                        await roll(client, channel);
+                    }, 3600000);
+                }
+            }
+
             const regex = /Claims: #(\d+)\s+Likes: #(\d+)\s+\*\*(\d+)\*\*/;
             const description = message.embeds[0].description;
 

@@ -114,6 +114,7 @@ process.title = `Mudae Farm Bot v${packageJson.version}`;
                 voteagaintime: 12 * 60 * 60 * 1000,
                 dailyagain: 20 * 60 * 60 * 1000,
                 dailykakeraagain: 20 * 60 * 60 * 1000,
+                rollresettime: 60 * 60 * 1000,
                 leftrolls: 0,
                 rollresetstock: 0,
             },

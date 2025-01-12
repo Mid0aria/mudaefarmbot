@@ -1,7 +1,7 @@
 {
     "name": "mudaefarmbot",
-    "version": "0.0.1",
-    "version_note": ".",
+    "version": "0.0.1.0.1",
+    "version_note": "Fixed Roll",
     "description": "Discord Mudae Farm Bot",
     "main": "bot.js",
     "repository": {
