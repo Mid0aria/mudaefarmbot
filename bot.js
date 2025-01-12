@@ -92,6 +92,9 @@ process.title = `Mudae Farm Bot v${packageJson.version}`;
     console.log(getRandomBanner());
     await globalutil.checkUpdate(logger, cp, packageJson);
     accounts.forEach(async ({ token, channelId }, index) => {
+        if (token.length < 10) {
+            return;
+        }
         const client = new Client();
 
         let mudaefarmbotglobal = {
